@@ -1,61 +1,23 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MoldovaVirusCoin – Мемкоин для тестирования DeFi</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Горизонтальная рулетка</title>
+  <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
-    <header>
-        <img src="logo.png" alt="MoldovaVirusCoin Logo" class="logo">
-        <h1>MoldovaVirusCoin (MVC)</h1>
-        <p>Тестируй, исследуй и ломай DeFi-механизмы вместе с MVC!</p>
-    </header>
-
-    <section id="about">
-        <h2>О проекте</h2>
-        <p><strong>MoldovaVirusCoin (MVC)</strong> – это не просто мемкоин, а инструмент для изучения и тестирования различных DeFi-систем.  
-        В мире децентрализованных финансов (DeFi) ежедневно появляются новые механизмы: автоматизированные маркетмейкеры, стейкинг, доходное фермерство, flash-loans,  
-        и многие другие. Наш проект создан для того, чтобы **экспериментировать, выявлять уязвимости и делиться инсайтами**.</p>
-
-        <p>Мы используем MVC в качестве тестового токена для проверки различных стратегий работы DeFi, а в нашем Telegram-канале рассказываем о том,  
-        как работают эти механизмы, какие риски несут и какие интересные баги встречаются в системах.</p>
-    </section>
-
-    <section id="features">
-        <h2>Что можно делать с MVC?</h2>
-        <ul>
-            <li>Тестировать механизмы ликвидности в DEX (Uniswap, PancakeSwap и другие).</li>
-            <li>Использовать MVC для экспериментов с фармингом и стейкингом.</li>
-            <li>Анализировать влияние различных стратегий на доходность.</li>
-            <li>Открывать и тестировать flash-loans, смотреть, какие схемы работают.</li>
-            <li>Публиковать отчеты о тестах в нашем Telegram-канале и делиться знаниями с комьюнити.</li>
-        </ul>
-    </section>
-
-    <section id="contract">
-        <h2>Контракт</h2>
-        <p><strong>Сеть:</strong> BNB Smart Chain (BSC)</p>
-        <p><strong>Контракт:</strong> <code>0xE8f6F1E426cEdD378c65cc998Cb2b49d4f8F6465</code></p>
-        <p><strong>Тип токена:</strong> BEP-20</p>
-    </section>
-
-    <section id="telegram">
-        <h2>Наш Telegram-канал</h2>
-        <p>Следите за нашими тестами и инсайтами в DeFi в нашем Telegram!</p>
-        <p><a href="https://t.me/TokenCripta" target="_blank">Перейти в Telegram</a></p>
-    </section>
-
-    <section id="contacts">
-        <h2>Контакты</h2>
-        <p>Email: <a href="mailto:bitfox79@gmail.com">bitfox79@gmail.com</a></p>
-        <p>Telegram: <a href="https://t.me/TokenCripta">t.me/moldovaviruscoin</a></p>
-    </section>
-
-    <footer>
-        <p>© 2025 MoldovaVirusCoin. Все права защищены.</p>
-    </footer>
+  <div class="roulette-container">
+    <div class="slider-wrapper">
+      <div class="slider-container">
+        <div id="carousel" class="carousel"></div>
+        <div class="center-window"></div>
+      </div>
+      <div class="arrow"></div>
+    </div>
+    <button id="spinButton">Вращать рулетку</button>
+    <div id="result" class="result"></div>
+  </div>
+  <script src="js/script.js"></script>
 </body>
 </html>
-
