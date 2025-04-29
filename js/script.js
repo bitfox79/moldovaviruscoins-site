@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const SEGMENTS    = 28;
-  const REPS        = 3;
-  const carousel    = document.getElementById('carousel');
-  const btn         = document.getElementById('spinButton');
-  const resultEl    = document.getElementById('result');
+  const SEGMENTS = 28;
+  const REPS     = 3;   // три копии ленты
+  const carousel = document.getElementById('carousel');
+  const btn      = document.getElementById('spinButton');
+  const resultEl = document.getElementById('result');
   const containerEl = document.querySelector('.slider-container');
 
-  // Тексты индивидуально для каждой imageN.jpg
+  // Маппинг: номер файла → {значение, текст}
   const results = {
     1:  { value: '-10к',  text: 'Ура спасибо за 10к!' },
     2:  { value: '-5к',   text: 'Приходи еще!' },
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     28: { value: '-2кк',  text: 'Кабан Кабаныч!' },
   };
 
-  // Клонируем 3 копии ленты
+  // Собираем 3 копии полосы
   for (let r = 0; r < REPS; r++) {
     for (let i = 1; i <= SEGMENTS; i++) {
       const img = document.createElement('img');
@@ -47,13 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // После отрисовки картинок измеряем актуальную ширину сегмента
-  const STRIDE      = containerEl.clientWidth / 3;
-  const totalW      = SEGMENTS * STRIDE;
-  const initialOff  = - totalW + (containerEl.clientWidth / 2) - (STRIDE / 2);
-
-  // Ставим карусель на центральную копию, первый сегмент по центру
-  carousel.style.transform = `translateX(${initialOff}px)`;
+  // По реальным размерам контейнера узнаём шаг (ширину одного квадрата)
+  const STRIDE     = containerEl.clientWidth;
+  const totalWidth = SEGMENTS * STRIDE;
+  // Ставим карусель на вторую копию (чтобы слева и справа были подложки)
+  let initialOffset = - totalWidth;
+  carousel.style.transform = `translateX(${initialOffset}px)`;
 
   let spinning = false;
   btn.addEventListener('click', () => {
@@ -61,29 +60,27 @@ document.addEventListener('DOMContentLoaded', () => {
     spinning = true;
     resultEl.textContent = '';
 
-    // Выбираем случайный номер от 1 до 28
+    // Случайный выбор от 1 до 28
     const pick = Math.floor(Math.random() * SEGMENTS) + 1;
+    // Сколько “прокрутить” из центра во вторую копию: one full strip + (pick-1) шагов
+    const loops = 2;
+    const shift = initialOffset - totalWidth * (loops - 1) - (pick - 1) * STRIDE;
 
-    // Считаем смещение: из центральной копии в третью + до pick
-    const shift = initialOff - totalW - (pick - 1) * STRIDE;
     carousel.style.transition = 'transform 5s cubic-bezier(.17,.67,.83,.67)';
     carousel.style.transform  = `translateX(${shift}px)`;
 
     carousel.addEventListener('transitionend', function handler() {
       carousel.removeEventListener('transitionend', handler);
-
-      // Показываем точно тот текст, что для image{pick}.jpg
+      // Показываем текст, соответствующий image{pick}.jpg
       const { value, text } = results[pick];
       resultEl.innerHTML = `
         <div class="result-value">${value}</div>
         <div class="result-text">${text}</div>
       `;
-
-      // Мгновенно сбрасываемся обратно на центральную копию, но уже на pick
-      const resetPos = initialOff - (pick - 1) * STRIDE;
+      // Мгновенно сбрасываем на центральную копию по pick
+      const resetPos = initialOffset - (pick - 1) * STRIDE;
       carousel.style.transition = 'none';
       carousel.style.transform  = `translateX(${resetPos}px)`;
-
       setTimeout(() => {
         carousel.style.transition = '';
         spinning = false;
