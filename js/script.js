@@ -1,16 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
   const SEGMENTS = 28;
-  const REPS     = 3;   // три копии ленты
+  const REPS     = 3;
   const carousel = document.getElementById('carousel');
   const btn      = document.getElementById('spinButton');
   const resultEl = document.getElementById('result');
   const containerEl = document.querySelector('.slider-container');
 
-  // Маппинг: номер файла → {значение, текст}
+  // Чёткий маппинг imageN → текст
   const results = {
-    1:  { value: '-10к',  text: 'Ура спасибо за 10к!' },
+    1:  { value: '-1кк',  text: 'Отличный день!' },
     2:  { value: '-5к',   text: 'Приходи еще!' },
-    3:  { value: '-3к',   text: 'Время помыть тарелки...' },
+    3:  { value: '-10к',  text: 'Ура спасибо за 10к!' },
     4:  { value: '-20к',  text: 'Логишно логишно' },
     5:  { value: '-15к',  text: '*уехал*' },
     6:  { value: '-100к', text: 'Получил и обналичил!' },
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     11: { value: '-2к',   text: 'Только у нас на мордор рп такая рулетка!' },
     12: { value: '-25к',  text: 'Это ограбление!' },
     13: { value: '-500$', text: 'Придется работать...' },
-    14: { value: '-1кк',  text: 'Отличный день!' },
+    14: { value: '-3к',   text: 'Время помыть тарелки...' },
     15: { value: '-500к', text: 'Спс лушая в мире!' },
     16: { value: '-50к',  text: 'Придется угнать эту тачку!' },
     17: { value: '-100$', text: 'Воды купить хоть...' },
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     28: { value: '-2кк',  text: 'Кабан Кабаныч!' },
   };
 
-  // Собираем 3 копии полосы
+  // 1) собираем 3 копии ленты
   for (let r = 0; r < REPS; r++) {
     for (let i = 1; i <= SEGMENTS; i++) {
       const img = document.createElement('img');
@@ -47,37 +47,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // По реальным размерам контейнера узнаём шаг (ширину одного квадрата)
-  const STRIDE     = containerEl.clientWidth;
-  const totalWidth = SEGMENTS * STRIDE;
-  // Ставим карусель на вторую копию (чтобы слева и справа были подложки)
-  let initialOffset = - totalWidth;
+  // 2) меряем ширину контейнера и ставим на 2-ю копию
+  const STRIDE = containerEl.clientWidth;
+  const totalW = SEGMENTS * STRIDE;
+  let initialOffset = - totalW;
   carousel.style.transform = `translateX(${initialOffset}px)`;
 
   let spinning = false;
   btn.addEventListener('click', () => {
     if (spinning) return;
     spinning = true;
-    resultEl.textContent = '';
+    resultEl.innerHTML = '';
 
-    // Случайный выбор от 1 до 28
     const pick = Math.floor(Math.random() * SEGMENTS) + 1;
-    // Сколько “прокрутить” из центра во вторую копию: one full strip + (pick-1) шагов
-    const loops = 2;
-    const shift = initialOffset - totalWidth * (loops - 1) - (pick - 1) * STRIDE;
+    // два полных цикла + нужный сдвиг
+    const shift = initialOffset - totalW * 2 - (pick - 1) * STRIDE;
 
-    carousel.style.transition = 'transform 5s cubic-bezier(.17,.67,.83,.67)';
+    carousel.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)';
     carousel.style.transform  = `translateX(${shift}px)`;
 
     carousel.addEventListener('transitionend', function handler() {
       carousel.removeEventListener('transitionend', handler);
-      // Показываем текст, соответствующий image{pick}.jpg
+
       const { value, text } = results[pick];
       resultEl.innerHTML = `
         <div class="result-value">${value}</div>
         <div class="result-text">${text}</div>
       `;
-      // Мгновенно сбрасываем на центральную копию по pick
+
+      // мгновенно возвращаемся на позицию pick во 2-ю копию
       const resetPos = initialOffset - (pick - 1) * STRIDE;
       carousel.style.transition = 'none';
       carousel.style.transform  = `translateX(${resetPos}px)`;
