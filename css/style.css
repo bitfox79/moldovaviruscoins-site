@@ -1,47 +1,55 @@
-/* общий фон и центрирование */
+/* 1) Фон + центрирование */
 body {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1e1e2e, #2e2e3e);
-  color: #fff;
-  font-family: sans-serif;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: #000;
 }
-.roulette-container {
-  text-align: center;
-  padding: 40px 20px;
+.mobile-frame {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.frame-bg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-/* обёртка, чтобы стрелка не резалась */
+/* 2) Рамка рулетки по размеру белого прямоугольника */
+.roulette-frame {
+  position: absolute;
+  top: calc(12.5% + 8px);
+  left: 5.5%;
+  width: 89%;
+  height: 55%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 3) Слайдер занимает 75% высоты рамки, результат — оставшиеся 25% */
 .slider-wrapper {
   position: relative;
-  width: 90vw;
-  max-width: 400px;
-  margin: 0 auto 20px;
+  width: 100%;
+  flex: 0 0 75%;
   overflow: visible;
 }
-
-/* квадратный видимый контейнер */
 .slider-container {
-  width: 100%;
-  height: 90vw;
-  max-height: 400px;
-  background: #222;
-  border: 6px solid #333;
-  border-radius: 12px;
-  overflow: hidden;
   position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  border-radius: 8px;
 }
 
-/* полоса картинок */
+/* 4) Полоса картинок */
 .carousel {
   display: flex;
 }
-
-/* сами изображения — ровно по размеру контейнера */
 .carousel img {
   flex: none;
   width: 100%;
@@ -49,54 +57,82 @@ body {
   object-fit: cover;
 }
 
-/* стрелка над контейнером */
+/* 5) Стрелка */
 .arrow {
   position: absolute;
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
   width: 0; height: 0;
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-bottom: 14px solid #ff8a00;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 12px solid #ff8a00;
   z-index: 10;
 }
 
-/* кнопка */
+/* 6) Результат под рулеткой */
+.result {
+  flex: 0 0 25%;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.result-value {
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #ff3e00;
+  line-height: 1;
+}
+.result-text {
+  font-size: 1.2em;
+  margin-top: 0.2em;
+  font-weight: 500;
+}
+
+/* 7) Кнопка «Вращать рулетку» над оригинальным SPIN */
 #spinButton {
-  padding: 12px 24px;
-  font-size: 18px;
+  position: absolute;
+  bottom: calc(12% - 44px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(60% - 18px);           /* ширина с учетом убранных 2.5мм по бокам */
+  max-width: calc(240px - 18px);
+  height: calc(40px + 42px);         /* увеличено на 2мм (~8px) */
+  font-size: 1em;
+  font-weight: 600;
   background: linear-gradient(135deg, #ff8a00, #e52e71);
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 20px;
   cursor: pointer;
+  z-index: 20;
+  pointer-events: auto;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  transition: transform .2s;
+  text-transform: uppercase;
+  padding: 0;
+  line-height: calc(40px + 42px);    /* центрирование текста */
 }
 #spinButton:active {
-  transform: scale(0.95);
+  transform: translateX(-50%) scale(0.95);
 }
 
-/* текст результата */
-.result {
-  margin-top: 20px;
-}
-.result-value {
-  font-size: 32px;
-  font-weight: bold;
-  color: #ff3e00;
-}
-.result-text {
-  font-size: 20px;
-  margin-top: 8px;
-}
-
-/* мелкая подгонка на очень узких экранах */
-@media (max-width: 480px) {
-  .slider-wrapper { max-width: 100vw; }
-  .slider-container { height: 100vw; }
-  #spinButton { font-size: 16px; padding: 10px 20px; }
-  .result-value { font-size: 28px; }
-  .result-text  { font-size: 16px; }
+/* 8) Мобильная корректировка */
+@media (max-width: 360px) {
+  .roulette-frame {
+    top: calc(14% + 8px);
+    height: 53%;
+  }
+  #spinButton {
+    bottom: calc(10% - 44px);
+    width: calc(65% - 18px);
+  }
+  .result-value {
+    font-size: 1.6em;
+  }
+  .result-text {
+    font-size: 1.1em;
+  }
 }
